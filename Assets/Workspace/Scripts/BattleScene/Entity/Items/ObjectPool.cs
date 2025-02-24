@@ -16,7 +16,6 @@ public class ObjectPool : MonoBehaviour
 	private void CreatePool() {
 		Debug.Log("ObjectPool.CreatePool is called.");
 
-		// TODO: scriptable objectを使い、factoryに依存しないようにする
 		string[] itemNameList = _factory.GetProductNameList();
 
 		foreach (string itemName in itemNameList) {
@@ -24,7 +23,7 @@ public class ObjectPool : MonoBehaviour
 
 			for (int i = 0; i < poolSize; i++) {
 				var product = _factory.CreateProduct(new Vector3(0, 0, 0), itemName);
-				//product.SetActive(false);
+				product.SetActive(false);
 				RegisterCallback(product);
 				queue.Enqueue(product);
 			}
@@ -40,6 +39,7 @@ public class ObjectPool : MonoBehaviour
 	private void CollectProduct(IProduct product) {
 		product.SetActive(false);
 		productPoolDict[product.ProductName].Enqueue(product);
+		Debug.Log($"Product is collected: productName {product.ProductName}");
 	}
 
 	public IProduct SpawnProduct(Vector3 position, string productName ) {
@@ -47,7 +47,9 @@ public class ObjectPool : MonoBehaviour
 		IProduct product;
 
 		try {
-			if (!productPoolDict.ContainsKey(productName)) throw new System.Exception($"指定されたproductNameはproductNameDictに存在しません. productName: {productName}");
+			if (!productPoolDict.ContainsKey(productName)) {
+				throw new System.Exception($"指定されたproductNameはproductNameDictに存在しません. productName: {productName}");
+			}
 
 			var productPool = productPoolDict[productName];
 
