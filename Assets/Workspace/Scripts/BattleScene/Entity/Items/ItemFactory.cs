@@ -11,11 +11,15 @@ public class ItemFactory : Factory
 
 		try {
 			var productPrefab = FindItemPrefabByName(prefabName);
-			if (productPrefab == null) throw new System.Exception($"存在しないアイテムが指定されました. prefabName: {prefabName}");
+			if (productPrefab == null) {
+				throw new System.Exception($"存在しないアイテムが指定されました. prefabName: {prefabName}");
+			}
 
 			// productParent以下にproductをインスタンス化する
 			productParent = FindProductObject();
-			if (productParent == null) throw new System.Exception($"存在しないオブジェクトを親オブジェクトとして指定しました. parentObjectName: {productParentObjectName}");
+			if (productParent == null) {
+				throw new System.Exception($"存在しないオブジェクトを親オブジェクトとして指定しました. parentObjectName: {productParentObjectName}");
+			}
 
 			GameObject instance = Instantiate(productPrefab, position, Quaternion.identity, productParent.transform);
 			newProduct = instance.GetComponent<IProduct>();
@@ -34,7 +38,6 @@ public class ItemFactory : Factory
 		string[] ret = new string[itemListSize];
 
 		for (int i = 0; i < itemListSize; i++) {
-			Debug.Log(itemList[i]);
 			ret[i] = itemList[i].name;
 		}
 
